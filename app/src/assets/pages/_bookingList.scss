@@ -1,0 +1,35 @@
+@import "../styles/variables.scss";
+.booking-list {
+  table {
+    margin: 20px;
+    border-collapse: collapse;
+    width: 100%;
+    th {
+      cursor: pointer;
+      &:hover {
+        background-color: $light-grey;
+      }
+      &.active {
+        background-color: $dark-grey;
+        color: $white;
+      }
+      &.ascending {
+        &::after {
+          content: " ▲";
+        }
+      }
+      &.descending {
+        &::after {
+          content: " ▼";
+        }
+      }
+    }
+    td {
+      text-align: center;
+      padding: 8px;
+    }
+  }
+  button {
+    margin-left: 10px;
+  }
+}

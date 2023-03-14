@@ -1,0 +1,24 @@
+/* Define custom styles */
+.container {
+  /* Use a font stack */
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
+    Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  width: 100%;
+  /* Nesting a class inside .container */
+  .title {
+    font-size: 2rem;
+    font-weight: bold;
+  }
+
+  /* Defining a variable for the primary color */
+  --primary-color: #3498db;
+
+  /* Using the variable in a selector */
+  a {
+    color: var(--primary-color);
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}

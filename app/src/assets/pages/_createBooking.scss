@@ -1,0 +1,41 @@
+.form-container {
+  background-color: #cac1c1;
+  padding: 40px;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+
+  .form-label {
+    font-weight: bold;
+  }
+
+  .form-control {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+
+  .btn-add-booking {
+    background-color: #007bff;
+    border-color: #007bff;
+    margin-top: 20px;
+    &:hover {
+      background-color: #0069d9;
+      border-color: #0062cc;
+    }
+  }
+
+  .alert {
+    margin-top: 20px;
+  }
+
+  .booking-form {
+    max-width: 500px;
+  }
+
+  .booking-form-label {
+    font-weight: bold;
+  }
+
+  .booking-form-button {
+    margin-top: 1rem;
+  }
+}

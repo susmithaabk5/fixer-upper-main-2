@@ -1,7 +1,8 @@
 
 CREATE TABLE "bookings" (
   "id" TEXT PRIMARY KEY, 
-  "createdDate" TEXT, 
-  "bookingDate" TEXT,
-  "location" TEXT,
-  "username" TEXT);
+  "createdDate" TIMESTAMP NOT NULL, 
+  "bookingDate" TEXT NOT NULL,
+  "location" TEXT NOT NULL,
+  "username" TEXT NOT NULL
+);

@@ -1,29 +1,37 @@
+import { Link } from "react-router-dom";
+import "../assets/layout/_header.scss";
+import universityBackgroundImg from "../assets/images/university-background.jpg";
+import NavLink from "./NavLink";
 
-export default function Header() {
-  return (<>
-    <div className="row">
-      <div className="col h1">
-        <a href='/'>
-          <img src='img/university-background.jpg' alt='' width={200} height={50} />
-        </a>
-        Welcome to Fixer-Upper Bookings
-      </div>
-    </div>
-    <div className="row">
-      <div className="col">
-        <div 
-          onClick={() => window.location.href='/list'} 
-          style={{color: 'blue', textDecoration: 'underline', cursor: 'pointer'}}>
-          List Bookings
+interface HeaderProps {
+  title: string;
+}
+
+export default function Header({ title }: HeaderProps) {
+  return (
+    <div className="header-container container-fluid bg-gradient">
+      <div className="row align-items-center">
+        <div className="col-3">
+          <Link to="/">
+            <img
+              src={universityBackgroundImg}
+              width={350}
+              height={250}
+              alt="University Logo"
+              className="img-fluid rounded"
+            />
+          </Link>
+        </div>
+        <div className="col-7 text-center">
+          <h1 className="m-0">{title}</h1>
+        </div>
+        <div className="col-2 d-flex justify-content-end">
+          <div className="row">
+            <NavLink to="/list" title="View Bookings" />
+            <NavLink to="/add" title="Create Booking" />
+          </div>
         </div>
       </div>
-      <div className="col">
-        <div 
-          onClick={() => window.location.href='/add'} 
-          style={{color: 'blue', textDecoration: 'underline', cursor: 'pointer'}}>
-          Create Booking
-        </div>
-      </div>
     </div>
-  </>)
+  );
 }

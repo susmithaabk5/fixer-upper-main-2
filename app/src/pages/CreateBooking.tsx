@@ -1,98 +1,148 @@
-import { useState } from "react"
-import { axios } from '../common'
-
-const LOCATIONS = [
-  'Vancouver', 'Victoria', 'Calgary', 'Toronto'
-]
+import { useState } from "react";
+import { axios } from "../common";
+import { LOCATIONS } from "../constants/locations";
+import { Form, Button, Row, Col, Alert } from "react-bootstrap";
+import "../assets/pages/_createBooking.scss";
 
 export default function CreateBooking() {
-  const [errorMsg, setErrorMsg] = useState('')
-  const [successMsg, setSuccessMsg] = useState('')
+  const [errorMsg, setErrorMsg] = useState<string>("");
+  const [successMsg, setSuccessMsg] = useState<string>("");
+  const [bookingDate, setBookingDate] = useState<string>("");
+  const [username, setUsername] = useState<string>("");
+  const [location, setLocation] = useState<string>(LOCATIONS[0]);
 
-  function showError(msg: string) {
-    setErrorMsg(msg)
-    document.getElementById('error-message')!.style.display = msg ? 'block' : 'none'
+  function showError(msg: string): void {
+    setErrorMsg(msg);
   }
 
-  function showSuccess(msg: string) {
-    setSuccessMsg(msg)
-    document.getElementById('success-message')!.style.display = msg ? 'block' : 'none'
+  function showSuccess(msg: string): void {
+    setSuccessMsg(msg);
   }
 
-  return <>
-    <div className="row">
-      <div className="col h4">
-        Booking Date
-      </div>
-      <div className="col">
-        <input type="date" id="date"/>
-      </div>
-    </div>
-    <div className="row">
-      <div className="col h4">
-        Booking Location
-      </div>
-      <div className="col">
-        <select id="location">
-          {LOCATIONS.map((loc) => {
-            return <option>{loc}</option>
-          })}
-        </select>
-      </div>
-    </div>
-    <div className="row">
-      <div className="col h4">
-        Booked By
-      </div>
-      <div className="col">
-        <input type="text" id="booked-by"></input>
-      </div>
-    </div>
-    <div className="row">
-      <div className="col">
-      </div>
-      <div className="col">
-        <div 
-          className="btn btn-primary"
-          onClick={() => {
-            showError('')
-            showSuccess('')
+  function handleAddBooking(): void {
+    if (!bookingDate || !username || !location) {
+      showError("Form input missing!");
+      return;
+    }
 
-            const bookingDate = new Date((document.getElementById('date') as HTMLInputElement).value)
-            const username = (document.getElementById('booked-by') as HTMLInputElement).value
-            const location = (document.getElementById('location') as HTMLSelectElement).value
-            
-            if (bookingDate < new Date()) {
-              showError('Cannot book in the past!')
-            }
+    const date = new Date(bookingDate);
 
-            if (!username) {
-              showError('No username provided!')
-            }
+    if (date < new Date()) {
+      showError("Cannot book in the past!");
+      return;
+    }
 
-            axios
-              .post('http://localhost:4000/api/addBooking', { bookingDate, username, location })
-              .then(({ data }) => {
-                if (data.error) {
-                  showError(data.error)
-                } else {
-                  showSuccess(data.message)
-                }
-              })
-          }}>
-          Add
-        </div>
-      </div>
+    axios
+      .post("http://localhost:4000/api/addBooking", {
+        bookingDate: date,
+        username,
+        location,
+      })
+      .then(({ data }) => {
+        if (data.error) {
+          showError(data.error);
+          showSuccess("");
+        } else {
+          showSuccess(data.message);
+          setErrorMsg("");
+          setBookingDate("");
+          setUsername("");
+          setLocation(LOCATIONS[0]);
+        }
+      })
+      .catch((error) => {
+        showError(error.message);
+        showSuccess("");
+      });
+  }
+
+  return (
+    <div className="form-container">
+      <Form>
+        <Row className="mb-3">
+          <Form.Label className="form-label" column sm={3}>
+            Booking Date
+          </Form.Label>
+          <Col sm={9}>
+            <Form.Control
+              type="date"
+              className="form-control"
+              value={bookingDate}
+              onChange={(event) => setBookingDate(event.target.value)}
+            />
+          </Col>
+        </Row>
+        <Row className="mb-3">
+          <Form.Label className="form-label" column sm={3}>
+            Booking Location
+          </Form.Label>
+          <Col sm={9}>
+            <Form.Select
+              className="form-control"
+              value={location}
+              onChange={(event) => setLocation(event.target.value)}
+            >
+              {LOCATIONS.map((loc) => {
+                return (
+                  <option key={loc} value={loc}>
+                    {loc}
+                  </option>
+                );
+              })}
+            </Form.Select>
+          </Col>
+        </Row>
+        <Row className="mb-3">
+          <Form.Label className="form-label" column sm={3}>
+            Booked By
+          </Form.Label>
+          <Col sm={9}>
+            <Form.Control
+              type="text"
+              className="form-control"
+              value={username}
+              onChange={(event) => setUsername(event.target.value)}
+            />
+          </Col>
+        </Row>
+        <Row className="mb-3">
+          <Col sm={6} className="text-end">
+            <Button
+              className="btn-add-booking ms-2"
+              variant="primary"
+              onClick={() => handleAddBooking()}
+            >
+              Add
+            </Button>
+          </Col>
+          <Col sm={6} className="text-end">
+            <Button
+              className="btn-reset-form ms-2"
+              variant="secondary"
+              onClick={() => {
+                setErrorMsg("");
+                setSuccessMsg("");
+                setBookingDate("");
+                setUsername("");
+                setLocation(LOCATIONS[0]);
+              }}
+            >
+              Reset
+            </Button>
+          </Col>
+        </Row>
+
+        <Row>
+          <Col>
+            <Alert variant="danger" show={errorMsg !== ""} className="alert">
+              {errorMsg}
+            </Alert>
+            <Alert variant="success" show={successMsg !== ""} className="alert">
+              {successMsg}
+            </Alert>
+          </Col>
+        </Row>
+      </Form>
     </div>
-    <div className="row">
-      <div className="col alert alert-danger" id="error-message" style={{display: 'none'}}>
-        {errorMsg}
-      </div>
-    </div>
-    <div className="row">
-      <div className="col alert alert-success" id="success-message" style={{display: 'none'}}>
-        {successMsg}
-      </div>
-    </div>
-  </>
+  );
 }

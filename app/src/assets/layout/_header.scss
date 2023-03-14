@@ -1,0 +1,25 @@
+.header-container {
+  width: 100%;
+  background: linear-gradient(to bottom right, #333333, #666666, #ffffff);
+  padding: 20px;
+
+  img {
+    display: block;
+    margin: 0 auto;
+  }
+
+  .row {
+    margin-top: 20px;
+    justify-content: center;
+
+    .link {
+      text-decoration: none;
+      color: #343a40;
+      font-weight: bold;
+
+      &:hover {
+        color: #007bff;
+      }
+    }
+  }
+}
